@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\UserSendCodeEmail;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,9 +28,12 @@ class AuthController extends Controller
             $user = new User();
             $user->email = $request->email;
             $user->save();
+            $role = new Role();
+            $role->role = 'player';
+            $user->role()->save($role);
         }
 
-        $code = rand(1000, 9999);
+        $code = rand(100000, 999999);
         $user->code = Hash::make($code);
         $user->code_expire = Carbon::now()->addMinutes(10);
         $user->save();
