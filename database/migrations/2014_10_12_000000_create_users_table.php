@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->string('code')->nullable();
-            $table->timestamp('code_expire');
+            $table->timestamp('code_expire')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
