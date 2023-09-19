@@ -48,7 +48,8 @@ class AuthController extends Controller
         }
     }
 
-    public function checkCode(Request $request){
+    public function checkCode(Request $request): \Illuminate\Http\JsonResponse
+    {
         $request->validate([
             'code'=>'required',
             'email'=>'required'
