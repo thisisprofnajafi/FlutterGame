@@ -13,8 +13,8 @@ use Illuminate\Queue\SerializesModels;
 class UserSendCodeEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $code;
-    protected $email;
+    public $code;
+    public $email;
 
     /**
      * Create a new message instance.
