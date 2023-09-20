@@ -11,13 +11,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Psy\Readline\Hoa\Exception;
+use function PHPUnit\Framework\isEmpty;
 
 class AuthController extends Controller
 {
-    public function getCode(Request $request){
+    public function getCode(Request $request)
+    {
 
     }
-    public function login(Request $request){
+
+    public function login(Request $request)
+    {
         $request->validate([
             'email' => 'required'
         ]);
@@ -38,42 +42,47 @@ class AuthController extends Controller
         $user->code_expire = Carbon::now()->addMinutes(10);
         $user->save();
         try {
-            Mail::to($user->email)->send(new UserSendCodeEmail($code,$user->email));
+            Mail::to($user->email)->send(new UserSendCodeEmail($code, $user->email));
             return response()->json([
-                "message"=> "code sent",
-                "status"=>true
-            ],201);
-        }catch (Exception $e){
+                "message" => "code sent",
+                "status" => true
+            ], 201);
+        } catch (Exception $e) {
             return response()->json([
-                "message"=> $e->getMessage(),
-                "email"=>$user->email,
-                "status"=>false
-            ],500);
+                "message" => $e->getMessage(),
+                "email" => $user->email,
+                "status" => false
+            ], 500);
         }
     }
 
     public function checkCode(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'code'=>'required',
-            'email'=>'required'
+            'code' => 'required',
+            'email' => 'required'
         ]);
 
-        $user = User::query()->where('email',$request->email)->first();
+        $user = User::query()->where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->code,$user->code) && $user->code_expire >= Carbon::now()){
+        if ($user && Hash::check($request->code, $user->code) && $user->code_expire >= Carbon::now()) {
             Auth::login($user);
             $token = $user->createToken('api-token')->plainTextToken;
+            if ($user->name != null && !isEmpty($user->name))
+                $hasName = true;
+            else
+                $hasName = false;
             return response()->json([
-                "message"=>"Logged In",
-                "token"=>$token,
-                "statue"=>true
-            ],201);
-        }else{
+                "message" => "Logged In",
+                "token" => $token,
+                "hasName"=>$hasName,
+                "status" => true
+            ], 201);
+        } else {
             return response()->json([
-                "message"=>"Unauthorized",
-                "statue"=>false
-            ],401);
+                "message" => "Unauthorized",
+                "status" => false
+            ], 401);
         }
     }
 }
