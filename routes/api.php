@@ -21,8 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('getCode',[AuthController::class,'getCode'])->name('user get Code');
-Route::post('login',[AuthController::class,'login'])->name('user login');
-Route::post('checkCode',[AuthController::class,'CheckCode'])->name('check code');
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/info', AuthController::class, 'getInfo');
+});
+
+
+Route::post('getCode', [AuthController::class, 'getCode'])->name('user get Code');
+Route::post('login', [AuthController::class, 'login'])->name('user login');
+Route::post('checkCode', [AuthController::class, 'CheckCode'])->name('check code');
 
 

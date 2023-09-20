@@ -6,6 +6,7 @@ use App\Mail\UserSendCodeEmail;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +19,26 @@ class AuthController extends Controller
     public function getCode(Request $request)
     {
 
+    }
+
+    public function getInfo()
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            if ($user->name != null && !isEmpty($user->name))
+                $hasName = true;
+            else
+                $hasName = false;
+
+            return response()->json([
+                'hasName' => $hasName,
+                'status' => true
+            ], 200);
+        }
+        return response()->json([
+            'status' => false
+        ], 401);
     }
 
     public function login(Request $request)
@@ -75,7 +96,7 @@ class AuthController extends Controller
             return response()->json([
                 "message" => "Logged In",
                 "token" => $token,
-                "hasName"=>$hasName,
+                "hasName" => $hasName,
                 "status" => true
             ], 201);
         } else {
