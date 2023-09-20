@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/info', AuthController::class, 'getInfo');
+    Route::get('info', AuthController::class, 'getInfo');
 });
 
 
