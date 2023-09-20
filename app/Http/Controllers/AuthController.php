@@ -34,7 +34,10 @@ class AuthController extends Controller
         file_put_contents($directory . '/' . $fileName, $imageData);
         $user->avatar = $fileName;
         $user->save();
-
+        return response()->json([
+            "message" => "name is set",
+            "status" => true
+        ], 201);
     }
 
     public function getInfo(): \Illuminate\Http\JsonResponse
