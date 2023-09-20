@@ -6,6 +6,7 @@ use App\Mail\UserSendCodeEmail;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use Identicon\Identicon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,8 +15,25 @@ use Psy\Readline\Hoa\Exception;
 
 class AuthController extends Controller
 {
-    public function getCode(Request $request)
+    public function setName(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $user = Auth::user();
+        $user->name = $request->name;
+
+        $identicon = new Identicon();
+        $em = explode('@',$user->email);
+        $base64Image = $identicon->getImageDataUri($request->name.$em[0]);
+        $base64Image = preg_replace('/^data:image\/\w+;base64,/', '', $base64Image);
+        $imageData = base64_decode($base64Image);
+        $fileName = 'avatar_' . uniqid() . '.png';
+        $directory = public_path('/users/avatars');
+        file_put_contents($directory . '/' . $fileName, $imageData);
+        $user->avatar = $fileName;
+        $user->save();
 
     }
 

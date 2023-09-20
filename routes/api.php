@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('info', [AuthController::class, 'getInfo']);
+    Route::post('setName', [AuthController::class, 'setName']);
 });
 
 
