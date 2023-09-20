@@ -21,7 +21,7 @@ class AuthController extends Controller
 
     }
 
-    public function getInfo()
+    public function getInfo(): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
 
