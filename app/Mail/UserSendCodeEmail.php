@@ -13,14 +13,13 @@ use Illuminate\Queue\SerializesModels;
 class UserSendCodeEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $code;
-    public $email;
+    protected $code;
+    protected $email;
 
     /**
      * Create a new message instance.
      */
     public function __construct($code, $email)
-    {
     {
         $this->code = $code;
         $this->email = $email;
@@ -47,11 +46,6 @@ class UserSendCodeEmail extends Mailable
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
