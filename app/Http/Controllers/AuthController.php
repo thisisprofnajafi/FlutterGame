@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            if ($user->name != null && $user->name = '')
+            if ($user->name != null && $user->name != '')
                 $hasName = true;
             else
                 $hasName = false;
@@ -108,7 +108,7 @@ class AuthController extends Controller
         if ($user && Hash::check($request->code, $user->code) && $user->code_expire >= Carbon::now()) {
             Auth::login($user);
             $token = $user->createToken('api-token')->plainTextToken;
-            if ($user->name != null && $user->name = '')
+            if ($user->name != null && $user->name != '')
                 $hasName = true;
             else
                 $hasName = false;
